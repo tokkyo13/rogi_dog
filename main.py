@@ -55,6 +55,8 @@ async def on_message(message):
     # voice channel に接続していなければ接続する
     if message.guild.voice_client is None:
         await message.author.voice.channel.connect()
+    else:
+        await message.guild.voice_client.move_to(message.author.voice.channel)
 
     # メッセージから改行，URL，カスタム絵文字を空白に変換
     # \n
