@@ -52,11 +52,7 @@ async def on_message(message):
         await message.channel.send("ボイスチャンネルにミュートの状態で参加してくださいロギ")
         return
 
-    # voice channel に接続していなければ接続する
-    if message.guild.voice_client is None:
-        await message.author.voice.channel.connect()
-
-    # メッセージから改行，URL，カスタム絵文字を空白に変換
+    # メッセージの改行，URL，カスタム絵文字を空白に変換
     # \n
     # http sが0または1個 :// 空白文字以外1個以上 空白文字
     # <: 任意の単語文字1個以上 : 任意の数字1個以上 >
@@ -68,13 +64,17 @@ async def on_message(message):
         await message.channel.send("長すぎるロギ！（{}/140）".format(message_length))
         return
 
+    # voice channel に接続していなければ接続する
+    if message.guild.voice_client is None:
+        await message.author.voice.channel.connect()
+
     # いま音声を再生中だったら待つ
     while message.guild.voice_client.is_playing():
         time.sleep(1)
         continue
 
     # openjtalk でメッセージのテキストから wav ファイルを作り
-    # ffmpeg で bytes-like object に変換
+    # ffmpeg で AudioSource に変換
     jtalk(message_casted)
     audio_source = discord.PCMVolumeTransformer(
         discord.FFmpegPCMAudio("message.wav", before_options="-guess_layout_max 0"),
