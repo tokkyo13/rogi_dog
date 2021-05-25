@@ -48,8 +48,8 @@ async def on_message(message):
         return
 
     # 発言者がボイスチャンネルでミュート状態でなければエラーメッセージ
-    if message.author.voice is None or not message.author.voice.self_mute:
-        await message.channel.send("ボイスチャンネルにミュートの状態で参加してくださいロギ")
+    if message.author.voice is None:
+        await message.channel.send("ボイスチャンネルに参加してくださいロギ")
         return
 
     # メッセージの改行，URL，カスタム絵文字を空白に変換
